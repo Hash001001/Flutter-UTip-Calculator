@@ -18,8 +18,21 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    var style = theme.textTheme.titleLarge!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontWeight: FontWeight.bold,
+      fontSize: 20
+    );
+
+
+
     return MaterialApp(
       title: "UTip",
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+        useMaterial3: true
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: Text("UTip"),
@@ -28,6 +41,7 @@ class _MyHomeState extends State<MyHome> {
               value: (_toggleValue), onChanged: (onChanged){
               setState(() {
                 _toggleValue = onChanged;
+                
               });
             })
           ],
@@ -40,7 +54,7 @@ class _MyHomeState extends State<MyHome> {
               child: Container(
                 height: 150,
                 decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(0.6),
+                  color: Colors.deepPurple[500]!.withOpacity(0.6),
                   borderRadius: BorderRadius.circular(6)
                 ),
                 padding: EdgeInsets.all(10),
@@ -48,8 +62,12 @@ class _MyHomeState extends State<MyHome> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Total Per Person", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
-                    Text("", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),)
+                    Text("Total Per Person",
+                     style: style),
+                    Text("\$230", style: style.copyWith(
+                      fontSize: 25,
+                      color: theme.colorScheme.onPrimary
+                    ),)
 
                   ],
                 ),
