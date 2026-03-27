@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tip_calculator/widgets/person_counter.dart';
+import 'package:flutter_tip_calculator/widgets/tip_slider.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -176,17 +177,12 @@ SizedBox(height: 5,),
                               ),),
                       ),
 
-                      Slider(
-                        min: 0, max: 1, divisions: 5, 
-                        label: ("${(_tipPercentage * 100).toInt()}%"),
-                        value: _tipPercentage, onChanged: (value){
-                      setState(() {
-                        _tipPercentage = value;
-                      });
-                    
-                        print(value);
-                      }),
+                      TipSlider(tipPercentage: _tipPercentage, onChanged: (value) {
 
+                        setState(() {
+                          _tipPercentage = value;
+                        });
+                      }),
                     ],
                   ),
                 ),
@@ -198,3 +194,5 @@ SizedBox(height: 5,),
     );
   }
 }
+
+
