@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tip_calculator/widgets/bill_amount.dart';
 import 'package:flutter_tip_calculator/widgets/person_counter.dart';
 import 'package:flutter_tip_calculator/widgets/tip_slider.dart';
 
@@ -15,7 +16,17 @@ class _MyHomeState extends State<MyHome> {
   final _textController = TextEditingController();
 
   int _personCount = 1;
-    double _tipPercentage = 0.0;
+  double _tipPercentage = 0.0;
+  double _billTotal = 0.0;
+  double _totalTip = 0.0;
+
+double _tipAmount(){
+  return ((_billTotal * _tipPercentage));
+}
+
+  double billPerPerson(){
+    return ((_billTotal * _tipPercentage) + (_billTotal) / _personCount);
+  }
 
   void _incrementPersonCount() {
     setState(() {
@@ -25,7 +36,7 @@ class _MyHomeState extends State<MyHome> {
 
   void _decrementPersonCount() {
     setState(() {
-      if (_personCount > 0) {
+      if (_personCount > 1) {
         _personCount--;
       }
     });
@@ -34,13 +45,16 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var billT = billPerPerson();
+    var totalT = _tipAmount();
+
+
     var style = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimary,
       fontWeight: FontWeight.bold,
       fontSize: 20,
     );
 
-  
     return MaterialApp(
       title: "UTip",
       theme: ThemeData(
@@ -78,7 +92,7 @@ class _MyHomeState extends State<MyHome> {
                   children: [
                     Text("Total Per Person", style: style),
                     Text(
-                      "\$230",
+                      "\$${billT.toStringAsFixed(1)}",
                       style: style.copyWith(
                         fontSize: 25,
                         color: theme.colorScheme.onPrimary,
@@ -89,90 +103,104 @@ class _MyHomeState extends State<MyHome> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: BoxBorder.all(
-                    color: Colors.purple.withOpacity(0.6),
-                    width: 1.5,
-                  ),
-                  borderRadius: BorderRadius.circular(6),
-                ),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: 8),
-                      BillAmountField(textController: _textController, theme: theme, amount: "100", onChanged: (value) {
-                        
-                      },),
-
-                      //spaces
-                      SizedBox(height: 20),
-                      //split bill widget
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: BoxBorder.all(
+                        color: Colors.purple.withOpacity(0.6),
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            "Split",
-                            style: theme.textTheme.titleMedium!.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          PersonCount(
+                          SizedBox(height: 8),
+                          BillAmountField(
+                            textController: _textController,
                             theme: theme,
-                            onDecrement: _decrementPersonCount,
-                            onIncrement: _incrementPersonCount,
-                            personCount: _personCount,
-                          ),
-                        ],
-                      ),
-
-                      //Pin widget
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Tip",
-                            style: theme.textTheme.titleMedium!.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            amount: _billTotal.toString(),
+                            onChanged: (value) {
+                              print("Bill amount changed: $value");
+                              setState(() {
+                                _billTotal = double.tryParse(value) ?? 0.0;
+                              });
+                            },
                           ),
 
-                          Text(
-                            "\$20",
-                            style: theme.textTheme.titleMedium!.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          //spaces
+                          SizedBox(height: 20),
+                          //split bill widget
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Split",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              PersonCount(
+                                theme: theme,
+                                onDecrement: _decrementPersonCount,
+                                onIncrement: _incrementPersonCount,
+                                personCount: _personCount,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
 
+                          //Pin widget
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Tip",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
 
-SizedBox(height: 5,),
+                              Text(
+                                "\$${totalT.toStringAsFixed(2)}",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
 
-                      //Slider for tip percentage
+                          SizedBox(height: 5),
 
-                      Center(
-                        child: Text("${(_tipPercentage * 100).toInt()}%", style: theme.textTheme.titleMedium!.copyWith(
+                          //Slider for tip percentage
+                          Center(
+                            child: Text(
+                              "${(_tipPercentage * 100).toInt()}%",
+                              style: theme.textTheme.titleMedium!.copyWith(
                                 color: theme.colorScheme.primary,
-                              
-                              ),),
+                              ),
+                            ),
+                          ),
+
+                          TipSlider(
+                            tipPercentage: _tipPercentage,
+                            onChanged: (value) {
+                              setState(() {
+                                _tipPercentage = value;
+                              });
+                            },
+                          ),
+                        ],
                       ),
-
-                      TipSlider(tipPercentage: _tipPercentage, onChanged: (value) {
-
-                        setState(() {
-                          _tipPercentage = value;
-                        });
-                      }),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -183,38 +211,3 @@ SizedBox(height: 5,),
     );
   }
 }
-
-class BillAmountField extends StatelessWidget {
-  const BillAmountField({
-    super.key,
-    required TextEditingController textController,
-    required this.theme, required this.amount, this.onChanged,
-  }) : _textController = textController;
-
-  final TextEditingController _textController;
-  final ThemeData theme;
-  final String amount; 
-  final ValueChanged<String>? onChanged;
-
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: _textController,
-      keyboardType: TextInputType.number,
-      onChanged: (value) {
-        onChanged?.call(value);
-      },
-      decoration: InputDecoration(
-        prefixIcon: Icon(
-          Icons.attach_money,
-          color: theme.colorScheme.primary,
-        ),
-        label: Text("Bill Amount"),
-        border: OutlineInputBorder(),
-      ),
-    );
-  }
-}
-
-

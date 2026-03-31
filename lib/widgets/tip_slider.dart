@@ -13,7 +13,7 @@ class TipSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slider(
-      min: 0, max: 1, divisions: 5, 
+      min: 0, max: 1, divisions: 6, 
       label: ("${(_tipPercentage * 100).toInt()}%"),
       value: _tipPercentage, onChanged: onChanged,
     
