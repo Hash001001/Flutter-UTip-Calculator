@@ -12,28 +12,43 @@ class PersonCount extends StatelessWidget {
   final ThemeData theme;
   final int _personCount;
 
-  final void Function() onDecrement; 
+  final void Function() onDecrement;
   final void Function() onIncrement;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          icon: Icon(Icons.remove),
-          color: theme.colorScheme.primary, onPressed: onDecrement,
-        ),
-    
         Text(
-          "$_personCount",
+          "Split",
           style: theme.textTheme.titleMedium!.copyWith(
             color: theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
           ),
         ),
-    
-        IconButton(
-          icon: Icon(Icons.add),
-          color: theme.colorScheme.primary, onPressed: onIncrement,
+
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove),
+              color: theme.colorScheme.primary,
+              onPressed: onDecrement,
+            ),
+            
+            Text(
+              "$_personCount",
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            
+            IconButton(
+              icon: Icon(Icons.add),
+              color: theme.colorScheme.primary,
+              onPressed: onIncrement,
+            ),
+          ],
         ),
       ],
     );

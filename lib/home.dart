@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tip_calculator/widgets/bill_amount.dart';
 import 'package:flutter_tip_calculator/widgets/person_counter.dart';
+import 'package:flutter_tip_calculator/widgets/tip_row.dart';
 import 'package:flutter_tip_calculator/widgets/tip_slider.dart';
+import 'package:flutter_tip_calculator/widgets/total_per_person.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -78,30 +80,7 @@ double _tipAmount(){
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple[500]!.withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                padding: EdgeInsets.all(19),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("Total Per Person", style: style),
-                    Text(
-                      "\$${billT.toStringAsFixed(1)}",
-                      style: style.copyWith(
-                        fontSize: 25,
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            TotalPerPerson(style: style, billT: billT, theme: theme),
 
             Expanded(
               child: SingleChildScrollView(
@@ -136,47 +115,15 @@ double _tipAmount(){
                           //spaces
                           SizedBox(height: 20),
                           //split bill widget
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Split",
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              PersonCount(
-                                theme: theme,
-                                onDecrement: _decrementPersonCount,
-                                onIncrement: _incrementPersonCount,
-                                personCount: _personCount,
-                              ),
-                            ],
+                          PersonCount(
+                            theme: theme,
+                            onDecrement: _decrementPersonCount,
+                            onIncrement: _incrementPersonCount,
+                            personCount: _personCount,
                           ),
 
                           //Pin widget
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Tip",
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              Text(
-                                "\$${totalT.toStringAsFixed(2)}",
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+                          TipRow(theme: theme, totalT: totalT),
 
                           SizedBox(height: 5),
 
@@ -211,3 +158,6 @@ double _tipAmount(){
     );
   }
 }
+
+
+
