@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tip_calculator/providers/theme_provider.dart';
 import 'package:flutter_tip_calculator/providers/tip_calculator_provider.dart';
 import 'package:flutter_tip_calculator/widgets/bill_amount.dart';
 import 'package:flutter_tip_calculator/widgets/person_counter.dart';
@@ -19,43 +20,13 @@ class _MyHomeState extends State<MyHome> {
 
   final _textController = TextEditingController();
 
-  // int _personCount = 1;
-  // double _tipPercentage = 0.0;
-  // double _billTotal = 0.0;
-  double _totalTip = 0.0;
-
-// double _tipAmount(){
-//   return ((_billTotal * _tipPercentage));
-// }
-
-//   double billPerPerson(){
-//     return ((_billTotal * _tipPercentage) + (_billTotal) / _personCount);
-//   }
-
-//   void _incrementPersonCount() {
-//     setState(() {
-//       _personCount++;
-//     });
-//   }
-
-//   void _decrementPersonCount() {
-//     setState(() {
-//       if (_personCount > 1) {
-//         _personCount--;
-//       }
-//     });
-//   }
-
   @override
   Widget build(BuildContext context) {
 
     final model = Provider.of<TipCalculatorModel>(context);
-
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     var theme = Theme.of(context);
-    //var billT = billPerPerson();
-    //var totalT = _tipAmount();
-
 
     var style = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -65,20 +36,19 @@ class _MyHomeState extends State<MyHome> {
 
     return MaterialApp(
       title: "UTip",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
-        useMaterial3: true,
-      ),
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+      //   useMaterial3: true,
+      // ),
+      theme: themeProvider.currentTheme,
       home: Scaffold(
         appBar: AppBar(
           title: Text("UTip"),
           actions: [
             Switch(
-              value: (_toggleValue),
+              value: (themeProvider.isDarkMode),
               onChanged: (onChanged) {
-                setState(() {
-                  _toggleValue = onChanged;
-                });
+                themeProvider.toggelTheme();
               },
             ),
           ],
