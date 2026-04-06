@@ -3,6 +3,7 @@ import 'package:flutter_tip_calculator/providers/theme_provider.dart';
 import 'package:flutter_tip_calculator/providers/tip_calculator_provider.dart';
 import 'package:flutter_tip_calculator/widgets/bill_amount.dart';
 import 'package:flutter_tip_calculator/widgets/person_counter.dart';
+import 'package:flutter_tip_calculator/widgets/theme_button.dart';
 import 'package:flutter_tip_calculator/widgets/tip_row.dart';
 import 'package:flutter_tip_calculator/widgets/tip_slider.dart';
 import 'package:flutter_tip_calculator/widgets/total_per_person.dart';
@@ -16,7 +17,6 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  bool _toggleValue = false;
 
   final _textController = TextEditingController();
 
@@ -45,15 +45,7 @@ class _MyHomeState extends State<MyHome> {
         appBar: AppBar(
           title: Text("UTip"),
           actions: [
-            Switch(
-              value: (themeProvider.isDarkMode),
-              onChanged: (onChanged) {
-                themeProvider.toggelTheme();
-              },
-            ),
-            IconButton(onPressed: (){
-              themeProvider.toggelTheme();
-            }, icon: themeProvider.isDarkMode ? Icon(Icons.dark_mode) :  Icon(Icons.light_mode))
+            ThemeButtonWidget()
           ],
         ),
         body: Column(
@@ -147,6 +139,7 @@ class _MyHomeState extends State<MyHome> {
     );
   }
 }
+
 
 
 
