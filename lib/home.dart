@@ -51,6 +51,9 @@ class _MyHomeState extends State<MyHome> {
                 themeProvider.toggelTheme();
               },
             ),
+            IconButton(onPressed: (){
+              themeProvider.toggelTheme();
+            }, icon: themeProvider.isDarkMode ? Icon(Icons.dark_mode) :  Icon(Icons.light_mode))
           ],
         ),
         body: Column(
